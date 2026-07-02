@@ -1,0 +1,1 @@
+Quiero construir un sistema de manejo de artículos publicados. Debe poder albergar y catalogar diferentes tipos de artículos. Y debe poder integrar artículos nuevos, viejos y de distintos medios (escrito, gráfico y videos). Sobre cada artículo se debe guardar un título, resumen, tags, referencias online, el artículo en sí mismo en Markdown, a veces incluyendo imágenes también.

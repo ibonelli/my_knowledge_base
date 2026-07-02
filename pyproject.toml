@@ -1,0 +1,21 @@
+[project]
+name = "article-catalog"
+version = "0.1.0"
+description = "Personal article cataloging CLI (Article Catalog System)"
+requires-python = ">=3.10"
+dependencies = [
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[project.scripts]
+article = "article_catalog.cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["article_catalog*"]

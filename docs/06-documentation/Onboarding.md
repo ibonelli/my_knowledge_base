@@ -77,7 +77,7 @@ Launch the desktop app against the same articles directory and index:
 ```bash
 .venv/bin/article-gui --articles-dir articles --db catalog.db
 ```
-- Left pane: tag/title search fields, the article list, and New/Reindex buttons.
+- Left pane, top to bottom: a title search field, a tag search field, a Search/Clear button row, the article list, and a New/Reindex button row.
 - Right pane: the selected (or new) article's metadata form, a split-pane Markdown editor with a live rendered preview, inline image thumbnails, and Save/Delete buttons.
 - Click an article in the list to load it into the detail pane; click New to clear the form for a new article; Save calls the same `core.add_article`/`core.edit_article` the CLI uses, so the Markdown files and SQLite index stay in sync exactly as they would from the CLI.
 

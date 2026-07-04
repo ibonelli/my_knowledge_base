@@ -6,6 +6,7 @@
 - Added: `tests/test_core.py` — 5 tests covering the shared core module (add/list/search/edit/delete/reindex, validation errors, not-found errors, backfill).
 - Changed: `article_catalog/cli.py` refactored to delegate to `core.py` instead of implementing validation/orchestration inline; CLI command behavior and output are unchanged.
 - Changed: `pyproject.toml` — added `PyQt6>=6.4` as a required dependency and the `article-gui` console script.
+- Changed: GUI search panel rearranged to 3 stacked rows (title field, tag field, Search/Clear buttons) instead of one combined row.
 - Fixed: N/A
 - Security: N/A — no auth/secrets in scope (NFR-003)
 

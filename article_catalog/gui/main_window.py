@@ -56,20 +56,23 @@ class MainWindow(QMainWindow):
         panel = QWidget()
         layout = QVBoxLayout(panel)
 
-        search_row = QHBoxLayout()
-        self.tag_filter = QLineEdit()
-        self.tag_filter.setPlaceholderText("tag")
+        # Search controls: title on its own line, then tag, then the action buttons.
         self.title_filter = QLineEdit()
         self.title_filter.setPlaceholderText("title")
+        layout.addWidget(self.title_filter)
+
+        self.tag_filter = QLineEdit()
+        self.tag_filter.setPlaceholderText("tag")
+        layout.addWidget(self.tag_filter)
+
+        search_button_row = QHBoxLayout()
         search_btn = QPushButton("Search")
         search_btn.clicked.connect(self.on_search)
         clear_btn = QPushButton("Clear")
         clear_btn.clicked.connect(self.on_clear_search)
-        search_row.addWidget(self.tag_filter)
-        search_row.addWidget(self.title_filter)
-        search_row.addWidget(search_btn)
-        search_row.addWidget(clear_btn)
-        layout.addLayout(search_row)
+        search_button_row.addWidget(search_btn)
+        search_button_row.addWidget(clear_btn)
+        layout.addLayout(search_button_row)
 
         self.list_widget = QListWidget()
         self.list_widget.setSelectionMode(QAbstractItemView.SelectionMode.SingleSelection)

@@ -1,10 +1,11 @@
 [project]
 name = "article-catalog"
 version = "0.1.0"
-description = "Personal article cataloging CLI (Article Catalog System)"
+description = "Personal article cataloging CLI and PyQt6 GUI (Article Catalog System)"
 requires-python = ">=3.10"
 dependencies = [
     "PyYAML>=6.0",
+    "PyQt6>=6.4",
 ]
 
 [project.optional-dependencies]
@@ -12,6 +13,7 @@ test = ["pytest>=7.0"]
 
 [project.scripts]
 article = "article_catalog.cli:main"
+article-gui = "article_catalog.gui.app:main"
 
 [build-system]
 requires = ["setuptools>=61.0"]

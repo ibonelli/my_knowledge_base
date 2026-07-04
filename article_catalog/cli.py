@@ -1,10 +1,9 @@
 import argparse
 import sys
-from datetime import date
 from pathlib import Path
 
-from . import index, storage
-from .models import MEDIA_TYPES, Article
+from . import core, index, storage
+from .models import MEDIA_TYPES
 
 DEFAULT_ARTICLES_DIR = "articles"
 DEFAULT_DB_PATH = "catalog.db"
@@ -28,85 +27,74 @@ def _print_rows(rows) -> None:
 
 def cmd_add(args: argparse.Namespace) -> None:
     conn = index.connect(args.db)
-    article = Article(
-        id=storage.generate_id(),
-        title=args.title,
-        media_type=args.media_type,
-        summary=args.summary or "",
-        tags=args.tags or [],
-        references=args.reference or [],
-        images=args.image or [],
-        published_date=args.published_date or date.today().isoformat(),
-        created_at=date.today().isoformat(),
-        body=_read_body(args.body_file),
-    )
     try:
-        storage.write_article(args.articles_dir, article)
+        article = core.add_article(
+            args.articles_dir,
+            conn,
+            title=args.title,
+            media_type=args.media_type,
+            summary=args.summary or "",
+            tags=args.tags or [],
+            references=args.reference or [],
+            images=args.image or [],
+            published_date=args.published_date,
+            body=_read_body(args.body_file),
+        )
     except storage.ValidationError as exc:
         print(f"error: {exc}", file=sys.stderr)
         sys.exit(1)
-    index.upsert_article(conn, article)
     print(f"added {article.id}: {article.title} -> {article.file_path}")
 
 
 def cmd_list(args: argparse.Namespace) -> None:
     conn = index.connect(args.db)
-    _print_rows(index.list_all(conn))
+    _print_rows(core.list_articles(conn))
 
 
 def cmd_search(args: argparse.Namespace) -> None:
     conn = index.connect(args.db)
-    _print_rows(index.search(conn, tag=args.tag, title=args.title))
+    _print_rows(core.search_articles(conn, tag=args.tag, title=args.title))
 
 
 def cmd_edit(args: argparse.Namespace) -> None:
     conn = index.connect(args.db)
-    path = storage.article_path(args.articles_dir, args.id)
-    if not path.exists():
+    body = _read_body(args.body_file) if args.body_file is not None else None
+    try:
+        article = core.edit_article(
+            args.articles_dir,
+            conn,
+            args.id,
+            title=args.title,
+            media_type=args.media_type,
+            summary=args.summary,
+            tags=args.tags,
+            references=args.reference,
+            images=args.image,
+            published_date=args.published_date,
+            body=body,
+        )
+    except core.NotFoundError:
         print(f"error: article {args.id} not found", file=sys.stderr)
         sys.exit(1)
-
-    article = storage.read_article(path)
-    if args.title is not None:
-        article.title = args.title
-    if args.media_type is not None:
-        article.media_type = args.media_type
-    if args.summary is not None:
-        article.summary = args.summary
-    if args.tags is not None:
-        article.tags = args.tags
-    if args.reference is not None:
-        article.references = args.reference
-    if args.image is not None:
-        article.images = args.image
-    if args.published_date is not None:
-        article.published_date = args.published_date
-    if args.body_file is not None:
-        article.body = _read_body(args.body_file)
-
-    try:
-        storage.write_article(args.articles_dir, article)
     except storage.ValidationError as exc:
         print(f"error: {exc}", file=sys.stderr)
         sys.exit(1)
-    index.upsert_article(conn, article)
     print(f"updated {article.id}")
 
 
 def cmd_delete(args: argparse.Namespace) -> None:
     conn = index.connect(args.db)
-    path = storage.article_path(args.articles_dir, args.id)
-    if not path.exists():
+    try:
+        core.delete_article(args.articles_dir, conn, args.id)
+    except core.NotFoundError:
         print(f"error: article {args.id} not found", file=sys.stderr)
         sys.exit(1)
-    storage.delete_article_file(args.articles_dir, args.id)
-    index.delete_article(conn, args.id)
     print(f"deleted {args.id}")
 
 
 def cmd_reindex(args: argparse.Namespace) -> None:
     conn = index.connect(args.db)
-    count = index.rebuild_index(conn, args.articles_dir)
+    count = core.reindex(conn, args.articles_dir)
     print(f"reindexed {count} article(s)")
 
 

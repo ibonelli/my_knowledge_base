@@ -50,5 +50,5 @@ Flow:
 
 ## Key decisions
 
-See `article-fetcher/docs/adr/` once written (this tool gets its own SDLC documentation, separate from
-the root Article Catalog System's `docs/`).
+- [ADR-001 — Standalone architecture](docs/adr/ADR-001-standalone-architecture.md)
+- [ADR-002 — trafilatura + Playwright-fallback extraction](docs/adr/ADR-002-trafilatura-with-playwright-fallback.md)

@@ -1,0 +1,24 @@
+[project]
+name = "article-fetcher"
+version = "0.1.0"
+description = "Standalone URL-to-Markdown fetcher: fetch, extract, and stage articles for manual review (schema-compatible with article_catalog front-matter)"
+requires-python = ">=3.10"
+dependencies = [
+    "requests>=2.31",
+    "trafilatura>=1.8",
+    "playwright>=1.40",
+    "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+test = ["pytest>=7.0"]
+
+[project.scripts]
+article-fetch = "article_fetcher.cli:main"
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["article_fetcher*"]

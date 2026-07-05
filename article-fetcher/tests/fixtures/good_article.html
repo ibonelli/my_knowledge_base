@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>The Quiet Rise of Local-First Software</title>
+</head>
+<body>
+<nav>Home | About | Contact</nav>
+<article>
+<h1>The Quiet Rise of Local-First Software</h1>
+<p>For years, the default architecture for new applications assumed a constant connection to a
+remote server. Every keystroke, every click, every small change was expected to travel across the
+network before it counted as real. That assumption is quietly being questioned by a growing group
+of developers who call their approach "local-first" software.</p>
+<p>The core idea is simple: the copy of the data on your own device is the primary copy, not a
+cache of some canonical version living on someone else's computer. Servers, when they exist at all,
+are treated as just another peer to synchronize with, not the ultimate source of truth. This single
+inversion has large consequences. Applications built this way tend to be faster, because there is no
+network round trip standing between a user's action and the visible result on the screen.</p>
+<p>They also tend to be more resilient. A local-first note-taking app keeps working on an airplane,
+in a basement with no signal, or during a server outage on the other side of the world. Conflicts
+that arise when two devices edit the same document offline are resolved later, using data structures
+such as conflict-free replicated data types, rather than being prevented up front by locking everyone
+out until they reconnect.</p>
+<p>None of this is entirely new. Version control systems have worked this way for decades, and many
+older desktop applications never assumed a network at all. What has changed is the tooling: modern
+sync engines, conflict resolution libraries, and local databases have matured enough that building a
+local-first application no longer means reinventing distributed systems theory from scratch every
+time. That maturation is what has slowly turned a niche preference into a real architectural option
+for teams building the next generation of collaborative software.</p>
+</article>
+<footer>Copyright 2024</footer>
+</body>
+</html>

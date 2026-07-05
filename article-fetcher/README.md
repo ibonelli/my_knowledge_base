@@ -1,5 +1,14 @@
 # article-fetcher
 
+## TLDR
+
+```bash
+cd article-fetcher
+.venv/bin/article-fetch https://www.enriquedans.com/2025/05/cerabyte-el-futuro-del-almacenamiento-de-datos-a-largo-plazo-en-ceramica.html
+```
+
+## Intro
+
 Standalone CLI: give it a URL, it fetches the page, converts the main content to Markdown, and stages
 it as a front-matter Markdown file for you to review and edit before saving.
 
@@ -52,3 +61,25 @@ Flow:
 
 - [ADR-001 — Standalone architecture](docs/adr/ADR-001-standalone-architecture.md)
 - [ADR-002 — trafilatura + Playwright-fallback extraction](docs/adr/ADR-002-trafilatura-with-playwright-fallback.md)
+
+## Behavior
+
+What happens:
+1. It fetches the page and converts the main content to Markdown (falls back to a headless-browser render automatically if the page looks JS-rendered/too thin).
+2. It opens a draft front-matter + Markdown file in $EDITOR (falls back to vi if $EDITOR isn't set) so you can fix the title, tags, summary, or body before anything is saved.
+3. After you close the editor, it asks Save to <path>? [y/N].
+4. If you confirm, it writes the file under imported/ (default output directory, relative to article-fetcher/).
+
+It never touches the root project's articles/ or catalog.db — if you want a fetched article in the actual catalog, copy the resulting .md file into articles/ yourself and run article reindex there.
+
+## Useful flags
+
+```
+.venv/bin/article-fetch <url> \
+  --media-type {written,graphic,video}   # default: written
+  --tag ai --tag productivity            # repeatable, optional
+  --output-dir some/other/dir            # default: imported/
+  --no-playwright-fallback               # disable the headless-browser fallback
+  --timeout 30                           # fetch timeout in seconds, default 15
+  --yes                                  # skip the final y/N confirmation (editor still opens)
+```
